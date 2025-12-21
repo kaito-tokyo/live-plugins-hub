@@ -23,8 +23,8 @@ FLATPAK_APP_ID="com.obsproject.Studio.Plugin.LiveBackgroundRemovalLite"
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 
-# 📂 Path configuration: flathub/<AppID>/<AppID>.json
-FLATPAK_DIR="${REPO_ROOT}/flathub/${FLATPAK_APP_ID}"
+# 📂 Path configuration: flatpak/<AppID>/<AppID>.json
+FLATPAK_DIR="${REPO_ROOT}/flatpak/${FLATPAK_APP_ID}"
 FLATPAK_JSON_PATH="${FLATPAK_DIR}/${FLATPAK_APP_ID}.json"
 FLATPAK_METAINFO_PATH="${FLATPAK_DIR}/${FLATPAK_APP_ID}.metainfo.xml"
 
