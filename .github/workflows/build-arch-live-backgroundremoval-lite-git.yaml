@@ -3,8 +3,6 @@ name: Arch live-backgroundremoval-lite-git
 on:
   push:
     branches: [main]
-    paths:
-      - 'arch/live-backgroundremoval-lite-git/**'
   workflow_dispatch:
 
 concurrency:

@@ -1,10 +1,8 @@
-name: Flatpak LiveBackgroundRemovalLite
+name: Flatpak live-backgroundremoval-lite
 
 on:
   push:
-    branches: [main]
-    paths:
-      - 'flatpak/com.obsproject.Studio.Plugin.LiveBackgroundRemovalLite/**'
+    tags: [live-backgroundremoval-lite/flatpak/*]
   workflow_dispatch:
 
 concurrency:
