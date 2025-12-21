@@ -3,6 +3,24 @@
 # Exit immediately if a command exits with a non-zero status.
 set -euo pipefail
 
+# --- Path Resolution & Setup ---
+
+# 1. Resolve the directory where this script is physically located.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# 2. Find the repository root relative to the script location.
+if ! git -C "$SCRIPT_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "❌ Error: This script must be located within a git repository."
+    exit 1
+fi
+
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
+
+# 3. Change the current working directory to the repository root.
+cd "${REPO_ROOT}"
+
+echo "📂 Working directory set to: ${REPO_ROOT}"
+
 # --- Pre-flight Checks ---
 
 # Check for required commands.
@@ -21,9 +39,10 @@ UPSTREAM_REPO="live-backgroundremoval-lite"
 FLATPAK_MODULE_NAME="live-backgroundremoval-lite"
 FLATPAK_APP_ID="com.obsproject.Studio.Plugin.LiveBackgroundRemovalLite"
 
-REPO_ROOT="$(git rev-parse --show-toplevel)"
+# Note: REPO_ROOT is already set in the "Path Resolution" section.
 
 # 📂 Path configuration: flatpak/<AppID>/<AppID>.json
+# Ensure this path matches your actual repository structure (flatpak vs flathub)
 FLATPAK_DIR="${REPO_ROOT}/flatpak/${FLATPAK_APP_ID}"
 FLATPAK_JSON_PATH="${FLATPAK_DIR}/${FLATPAK_APP_ID}.json"
 FLATPAK_METAINFO_PATH="${FLATPAK_DIR}/${FLATPAK_APP_ID}.metainfo.xml"
@@ -151,6 +170,15 @@ git add "${FLATPAK_JSON_PATH}" "${FLATPAK_METAINFO_PATH}"
 
 # Commit changes (continue even if there are no changes to commit)
 git commit -m "feat(flatpak): update ${PKG_NAME} to ${NEW_VERSION}" || echo "⚠️  Commit failed or nothing to commit. Continuing..."
+
+# ▼▼▼ NEW: Abort if working tree is dirty ▼▼▼
+if [ -n "$(git status --porcelain)" ]; then
+    echo "❌ Error: Working tree is dirty (uncommitted changes present). Aborting."
+    echo "   Please check the following files:"
+    git status --short
+    exit 1
+fi
+# ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
 if git rev-parse "${TAG_NAME}" >/dev/null 2>&1; then
     echo "⚠️  Tag '${TAG_NAME}' already exists. Skipping tag creation."

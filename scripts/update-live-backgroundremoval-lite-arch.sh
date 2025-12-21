@@ -1,12 +1,28 @@
 #!/bin/bash
 set -euo pipefail
 
+# --- Path Resolution & Setup ---
+
+# 1. Resolve the directory where this script is physically located.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# 2. Find the repository root relative to the script location.
+if ! git -C "$SCRIPT_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "❌ Error: This script must be located within a git repository."
+    exit 1
+fi
+
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
+
+# 3. Change the current working directory to the repository root.
+cd "${REPO_ROOT}"
+
+echo "📂 Working directory set to: ${REPO_ROOT}"
+
 # --- Configuration ---
 PKG_NAME="live-backgroundremoval-lite"
 UPSTREAM_OWNER="kaito-tokyo"
 UPSTREAM_REPO="live-backgroundremoval-lite"
-
-REPO_ROOT="$(git rev-parse --show-toplevel)"
 
 # 📂 Directory structure: arch/plugin/PKGBUILD
 ARCH_PKGBUILD_PATH="${REPO_ROOT}/arch/${PKG_NAME}/PKGBUILD"
@@ -72,25 +88,18 @@ fi
 TEMP_FILE=$(mktemp)
 
 # Use awk to replace values and write to the temporary file
-# Pass variables to awk using -v
 awk -v new_ver="${NEW_VERSION}" \
     -v new_sum="${SHA256_SUM}" \
     '{
-        # Find and replace the pkgver line
         if ($0 ~ /^pkgver=/) {
             print "pkgver=" new_ver
         }
-        # Find the pkgrel line and reset it to 1
         else if ($0 ~ /^pkgrel=/) {
             print "pkgrel=1"
         }
-        # Find and replace the sha256sums line
         else if ($0 ~ /^sha256sums=\(/) {
-            # \x27 represents a single quote in hex.
-            # Constructing the string "sha256sums=('" new_sum "')"
             print "sha256sums=(\x27" new_sum "\x27)"
         }
-        # Print other lines as they are
         else {
             print $0
         }
@@ -110,9 +119,15 @@ echo "🚀 Executing Git operations..."
 
 git add "${ARCH_PKGBUILD_PATH}"
 
-# Note: Continue even if commit fails
-# By adding "|| echo ...", the script won't stop even if there are no changes (exit code 1).
-git commit -m "feat(${PKG_NAME}): update to ${NEW_VERSION}" || echo "⚠️  Commit failed or nothing to commit. Continuing to push..."
+# Note: Continue even if commit fails or nothing to commit
+git commit -m "feat(${PKG_NAME}): update to ${NEW_VERSION}" || echo "⚠️  Commit failed or nothing to commit."
+
+if [ -n "$(git status --porcelain)" ]; then
+    echo "❌ Error: Working tree is dirty (uncommitted changes present). Aborting."
+    echo "   Please check the following files:"
+    git status --short
+    exit 1
+fi
 
 if git rev-parse "${TAG_NAME}" >/dev/null 2>&1; then
     echo "⚠️  Tag '${TAG_NAME}' already exists. Skipping tag creation."
@@ -127,4 +142,4 @@ echo "  📤 Pushing changes to remote (branch: ${CURRENT_BRANCH})..."
 git push origin "${CURRENT_BRANCH}"
 git push origin "${TAG_NAME}"
 
-echo "🎉 Successfully updated, committed (if changes existed), tagged, and pushed!"
+echo "🎉 Successfully updated, committed, tagged, and pushed!"
