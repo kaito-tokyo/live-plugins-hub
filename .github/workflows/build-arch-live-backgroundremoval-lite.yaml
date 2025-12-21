@@ -6,10 +6,6 @@ on:
     tags: [live-backgroundremoval-lite/arch/*]
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: false
-
 jobs:
   build:
     runs-on: ubuntu-24.04
