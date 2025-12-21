@@ -17,7 +17,7 @@
       "config-opts": [
         "-DCMAKE_BUILD_TYPE=Release",
         "-DCMAKE_INSTALL_INCLUDEDIR=include",
-        "-DNCNN_SHARED_LIB=ON",
+        "-DNCNN_SHARED_LIB=OFF",
         "-DNCNN_BUILD_TESTS=OFF",
         "-DNCNN_BUILD_EXAMPLES=OFF",
         "-DNCNN_BUILD_TOOLS=OFF"
