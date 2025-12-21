@@ -2,6 +2,7 @@ name: Flatpak live-backgroundremoval-lite
 
 on:
   push:
+    branches: [main]
     tags: [live-backgroundremoval-lite/flatpak/*]
   workflow_dispatch:
 

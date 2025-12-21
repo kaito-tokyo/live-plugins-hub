@@ -2,8 +2,8 @@ name: Arch live-backgroundremoval-lite
 
 on:
   push:
-    tags:
-      - 'live-backgroundremoval-lite/arch/*'
+    branches: [main]
+    tags: [live-backgroundremoval-lite/arch/*]
   workflow_dispatch:
 
 concurrency:
