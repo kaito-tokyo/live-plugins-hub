@@ -110,9 +110,7 @@ echo "🚀 Executing Git operations..."
 
 git add "${ARCH_PKGBUILD_PATH}"
 
-# Note: Continue even if commit fails
-# By adding "|| echo ...", the script won't stop even if there are no changes (exit code 1).
-git commit -m "feat(${PKG_NAME}): update to ${NEW_VERSION}" || echo "⚠️  Commit failed or nothing to commit. Continuing to push..."
+git commit -m "feat(${PKG_NAME}): update to ${NEW_VERSION}"
 
 if git rev-parse "${TAG_NAME}" >/dev/null 2>&1; then
     echo "⚠️  Tag '${TAG_NAME}' already exists. Skipping tag creation."
