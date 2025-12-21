@@ -3,7 +3,7 @@
   "branch": "stable",
   "runtime": "com.obsproject.Studio",
   "runtime-version": "stable",
-  "sdk": "org.freedesktop.Sdk//24.08",
+  "sdk": "org.kde.Sdk//6.8",
   "build-extension": true,
   "separate-locales": false,
   "build-options": {
