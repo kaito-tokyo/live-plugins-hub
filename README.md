@@ -1,3 +1,9 @@
+[![Arch live-backgroundremoval-lite](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-backgroundremoval-lite.yaml/badge.svg)](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-backgroundremoval-lite.yaml)
+
+[![Arch live-backgroundremoval-lite-git](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-backgroundremoval-lite-git.yaml/badge.svg)](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-backgroundremoval-lite-git.yaml)
+
+[![Flatpak live-backgroundremoval-lite](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-flatpak-live-backgroundremoval-lite.yaml/badge.svg)](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-flatpak-live-backgroundremoval-lite.yaml)
+
 # Live Plugins Hub 🎥
 
 Welcome! This repository contains packaging definitions for our Live Plugins for OBS Studio, specifically for **Arch Linux** and **Flatpak** users.
