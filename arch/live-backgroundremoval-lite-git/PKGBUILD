@@ -7,10 +7,10 @@ pkgdesc='Live Background Removal Lite for OBS Studio'
 arch=('x86_64')
 url="https://github.com/kaito-tokyo/${_pkgname}"
 license=('GPL-3.0-or-later')
-depends=('obs-studio' 'curl' 'fmt' 'ncnn' 'opencv')
-makedepends=('git' 'cmake' 'ninja')
-provides=("${_pkgname}" "${_pkgname}-debug")
-conflicts=("${_pkgname}" "${_pkgname}-debug")
+depends=('curl' 'fmt' 'ncnn' 'obs-studio')
+makedepends=('cmake' 'git' 'ninja')
+provides=("${_pkgname}")
+conflicts=("${_pkgname}")
 source=("${_pkgname}::git+https://github.com/kaito-tokyo/${_pkgname}.git")
 sha256sums=('SKIP')
 
@@ -23,11 +23,9 @@ pkgver() {
 build() {
   cd "${_pkgname}"
   cmake -B build -S . \
-    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_LIBDIR=lib \
-    -DENABLE_FRONTEND_API=ON \
-    -DENABLE_QT=ON \
     -DUSE_PKGCONFIG=ON \
     -DBUILD_TESTING=OFF \
     -GNinja
