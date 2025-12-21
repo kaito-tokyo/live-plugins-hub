@@ -25,9 +25,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Restore Flatpak Builder Cache
+        id: restore-cache
+        uses: actions/cache/restore@v5
+        with:
+          path: .flatpak-builder
+          key: flatpak-builder-${{ hashFiles('flatpak/com.obsproject.Studio.Plugin.LiveBackgroundRemovalLite/com.obsproject.Studio.Plugin.LiveBackgroundRemovalLite.json') }}
+          restore-keys: |
+            flatpak-builder-
+
       - name: Build Flatpak
         uses: flatpak/flatpak-github-actions/flatpak-builder@10a3c29f0162516f0f68006be14c92f34bd4fa6c
         with:
           bundle: com.obsproject.Studio.Plugin.LiveBackgroundRemovalLite
           manifest-path: flatpak/com.obsproject.Studio.Plugin.LiveBackgroundRemovalLite/com.obsproject.Studio.Plugin.LiveBackgroundRemovalLite.json
-          cache-key: flatpak-builder-${{ github.sha }}
+          cache: false
+
+      - name: Save Flatpak Builder Cache
+        uses: actions/cache/save@v4
+        if: success() && steps.restore-cache.outputs.cache-hit != 'true'
+        with:
+          path: .flatpak-builder
+          key: flatpak-builder-${{ hashFiles('flatpak/com.obsproject.Studio.Plugin.LiveBackgroundRemovalLite/com.obsproject.Studio.Plugin.LiveBackgroundRemovalLite.json') }}
