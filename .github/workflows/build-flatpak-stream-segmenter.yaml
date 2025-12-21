@@ -1,0 +1,50 @@
+name: Flatpak live-stream-segmenter
+
+on:
+  push:
+    branches: [main]
+    tags: [live-stream-segmenter/flatpak/*]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:kde-6.8
+      options: --privileged
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Restore Flatpak Builder Cache
+        id: restore-cache
+        uses: actions/cache/restore@v5
+        with:
+          path: .flatpak-builder
+          key: flatpak-builder-${{ hashFiles('flatpak/com.obsproject.Studio.Plugin.LiveStreamSegmenter/com.obsproject.Studio.Plugin.LiveStreamSegmenter.json') }}
+          restore-keys: |
+            flatpak-builder-
+
+      - name: Build Flatpak
+        uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          bundle: com.obsproject.Studio.Plugin.LiveStreamSegmenter
+          manifest-path: flatpak/com.obsproject.Studio.Plugin.LiveStreamSegmenter/com.obsproject.Studio.Plugin.LiveStreamSegmenter.json
+          cache: false
+
+      - name: Save Flatpak Builder Cache
+        uses: actions/cache/save@v5
+        if: success() && steps.restore-cache.outputs.cache-hit != 'true'
+        with:
+          path: .flatpak-builder
+          key: flatpak-builder-${{ hashFiles('flatpak/com.obsproject.Studio.Plugin.LiveStreamSegmenter/com.obsproject.Studio.Plugin.LiveStreamSegmenter.json') }}

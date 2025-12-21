@@ -1,0 +1,46 @@
+name: Arch live-stream-segmenter
+
+on:
+  push:
+    branches: [main]
+    tags: [live-stream-segmenter/arch/*]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    container:
+      image: archlinux:base-devel
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout project repository
+        uses: actions/checkout@v6
+
+      - name: Setup builder
+        shell: bash
+        run: |
+          useradd -m builder
+          echo 'builder ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/builder
+          chown -R builder:builder .
+          pacman -Syu --noconfirm git
+
+      - name: Install cpp-httplib
+        shell: bash
+        run: |
+          git clone https://aur.archlinux.org/cpp-httplib.git
+          cd cpp-httplib
+          sudo -u builder makepkg -si --noconfirm
+
+      - name: Build
+        shell: bash
+        working-directory: arch/live-stream-segmenter
+        run: sudo -u builder makepkg -s --noconfirm
