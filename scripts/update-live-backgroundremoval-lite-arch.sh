@@ -8,7 +8,7 @@ UPSTREAM_REPO="live-backgroundremoval-lite"
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 
-# 📁 ディレクトリ構造: arch/plugin/PKGBUILD (ユーザー様の好み)
+# 📂 ディレクトリ構造: arch/plugin/PKGBUILD
 ARCH_PKGBUILD_PATH="${REPO_ROOT}/arch/${PKG_NAME}/PKGBUILD"
 
 # --- Main Script ---
@@ -42,7 +42,6 @@ NEW_VERSION="${LATEST_TAG#v}"
 # 2. Check current version
 if [ ! -f "${ARCH_PKGBUILD_PATH}" ]; then
     echo "❌ Error: PKGBUILD not found at ${ARCH_PKGBUILD_PATH}"
-    echo "   Expected structure: arch/${PKG_NAME}/PKGBUILD"
     exit 1
 fi
 
@@ -55,7 +54,7 @@ fi
 
 echo "🔄 Update needed: ${CURRENT_VERSION} -> ${NEW_VERSION}"
 
-# 3. Update PKGBUILD
+# 3. Update PKGBUILD (Using awk)
 echo "📦 Updating PKGBUILD..."
 
 DOWNLOAD_URL="https://github.com/${UPSTREAM_OWNER}/${UPSTREAM_REPO}/archive/refs/tags/${LATEST_TAG}.tar.gz"
@@ -66,21 +65,40 @@ if [ -z "${SHA256_SUM}" ]; then
     exit 1
 fi
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    SED_CMD=(sed -i '')
-else
-    SED_CMD=(sed -i)
-fi
+# 一時ファイルを作成
+TEMP_FILE=$(mktemp)
 
-"${SED_CMD[@]}" -e "s/^pkgver=.*/pkgver=${NEW_VERSION}/" "${ARCH_PKGBUILD_PATH}"
-"${SED_CMD[@]}" -e "s/^pkgrel=.*/pkgrel=1/" "${ARCH_PKGBUILD_PATH}"
-"${SED_CMD[@]}" -e "s/^sha256sums=('.*')/sha256sums=('${SHA256_SUM}')/" "${ARCH_PKGBUILD_PATH}"
+# awkを使って値を置換し、一時ファイルに書き出す
+# -v で変数をawk内部に渡しています
+awk -v new_ver="${NEW_VERSION}" \
+    -v new_sum="${SHA256_SUM}" \
+    '{
+        # pkgverの行を見つけたら置換
+        if ($0 ~ /^pkgver=/) {
+            print "pkgver=" new_ver
+        }
+        # pkgrelの行を見つけたら 1 にリセット
+        else if ($0 ~ /^pkgrel=/) {
+            print "pkgrel=1"
+        }
+        # sha256sumsの行を見つけたら置換
+        else if ($0 ~ /^sha256sums=\(/) {
+            print "sha256sums=(\x27" new_sum "\x27)"
+        }
+        # それ以外の行はそのまま出力
+        else {
+            print $0
+        }
+    }' "${ARCH_PKGBUILD_PATH}" > "${TEMP_FILE}"
+
+# 成功したら元のファイルを上書き
+mv "${TEMP_FILE}" "${ARCH_PKGBUILD_PATH}"
 
 echo "  ✅ PKGBUILD updated."
 
 # --- 4. Git Operations ---
 
-# 🏷️ タグ名: plugin/arch/ver (リスト表示での整理整頓を優先)
+# 🏷️ タグ名: plugin/arch/ver
 TAG_NAME="${PKG_NAME}/arch/${NEW_VERSION}-1"
 
 echo "🚀 Executing Git operations..."
