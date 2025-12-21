@@ -6,11 +6,15 @@ Currently, we maintain packaging files for:
 
 **live-backgroundremoval-lite:**
 
-[![Arch live-backgroundremoval-lite](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-backgroundremoval-lite.yaml/badge.svg)](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-backgroundremoval-lite.yaml) [![Arch live-backgroundremoval-lite-git](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-backgroundremoval-lite-git.yaml/badge.svg)](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-backgroundremoval-lite-git.yaml) [![Flatpak live-backgroundremoval-lite](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-flatpak-live-backgroundremoval-lite.yaml/badge.svg)](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-flatpak-live-backgroundremoval-lite.yaml)
+[![Arch live-backgroundremoval-lite](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-backgroundremoval-lite.yaml/badge.svg)](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-backgroundremoval-lite.yaml)
+[![Arch live-backgroundremoval-lite-git](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-backgroundremoval-lite-git.yaml/badge.svg)](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-backgroundremoval-lite-git.yaml)
+[![Flatpak live-backgroundremoval-lite](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-flatpak-live-backgroundremoval-lite.yaml/badge.svg)](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-flatpak-live-backgroundremoval-lite.yaml)
 
 **live-stream-segmenter:**
 
-[![Arch live-stream-segmenter](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-stream-segmenter.yaml/badge.svg)](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-stream-segmenter.yaml) [![Arch live-stream-segmenter-git](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-stream-segmenter-git.yaml/badge.svg)](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-stream-segmenter-git.yaml) [![Flatpak live-stream-segmenter](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-flatpak-live-stream-segmenter.yaml/badge.svg)](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-flatpak-live-stream-segmenter.yaml)
+[![Arch live-stream-segmenter](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-stream-segmenter.yaml/badge.svg)](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-stream-segmenter.yaml)
+[![Arch live-stream-segmenter-git](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-stream-segmenter-git.yaml/badge.svg)](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-arch-live-stream-segmenter-git.yaml)
+[![Flatpak live-stream-segmenter](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-flatpak-live-stream-segmenter.yaml/badge.svg)](https://github.com/kaito-tokyo/live-plugins-hub/actions/workflows/build-flatpak-live-stream-segmenter.yaml)
 
 ---
 
