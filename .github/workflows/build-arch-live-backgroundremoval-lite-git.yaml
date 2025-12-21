@@ -1,0 +1,40 @@
+name: Arch live-backgroundremoval-lite-git
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'arch/live-backgroundremoval-lite-git/**'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    container:
+      image: archlinux:base-devel
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout project repository
+        uses: actions/checkout@v6
+
+      - name: Setup builder
+        shell: bash
+        run: |
+          useradd -m builder
+          echo 'builder ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/builder
+          chown -R builder:builder .
+          pacman -Syu --noconfirm git
+
+      - name: Build
+        shell: bash
+        working-directory: arch/live-backgroundremoval-lite-git
+        run: sudo -u builder makepkg -s --noconfirm
