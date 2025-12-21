@@ -42,7 +42,6 @@ FLATPAK_APP_ID="com.obsproject.Studio.Plugin.LiveBackgroundRemovalLite"
 # Note: REPO_ROOT is already set in the "Path Resolution" section.
 
 # 📂 Path configuration: flatpak/<AppID>/<AppID>.json
-# Ensure this path matches your actual repository structure (flatpak vs flathub)
 FLATPAK_DIR="${REPO_ROOT}/flatpak/${FLATPAK_APP_ID}"
 FLATPAK_JSON_PATH="${FLATPAK_DIR}/${FLATPAK_APP_ID}.json"
 FLATPAK_METAINFO_PATH="${FLATPAK_DIR}/${FLATPAK_APP_ID}.metainfo.xml"
@@ -59,9 +58,11 @@ if [ -n "${GITHUB_TOKEN-}" ]; then
     CURL_ARGS+=(-H "Authorization: token ${GITHUB_TOKEN}")
 fi
 
-# 1. Fetch Latest Version & Date from GitHub API
-echo "📡 Fetching latest release info from GitHub..."
-API_URL="https://api.github.com/repos/${UPSTREAM_OWNER}/${UPSTREAM_REPO}/releases/latest"
+# 1. Fetch Latest Tag from GitHub API
+echo "📡 Fetching latest tag info from GitHub..."
+
+# Changed from releases/latest to tags?per_page=1
+API_URL="https://api.github.com/repos/${UPSTREAM_OWNER}/${UPSTREAM_REPO}/tags?per_page=1"
 LATEST_TAG_JSON=$(curl "${CURL_ARGS[@]}" "${API_URL}")
 
 if echo "${LATEST_TAG_JSON}" | grep -q "API rate limit exceeded"; then
@@ -69,8 +70,8 @@ if echo "${LATEST_TAG_JSON}" | grep -q "API rate limit exceeded"; then
     exit 1
 fi
 
-LATEST_TAG=$(echo "${LATEST_TAG_JSON}" | jq -r .tag_name)
-PUBLISHED_AT=$(echo "${LATEST_TAG_JSON}" | jq -r .published_at)
+# Parse the tag name from the array (.[0].name)
+LATEST_TAG=$(echo "${LATEST_TAG_JSON}" | jq -r '.[0].name')
 
 if [ "${LATEST_TAG}" == "null" ] || [ -z "${LATEST_TAG}" ]; then
     echo "❌ Error: Failed to fetch the latest tag."
@@ -78,11 +79,13 @@ if [ "${LATEST_TAG}" == "null" ] || [ -z "${LATEST_TAG}" ]; then
 fi
 
 NEW_VERSION="${LATEST_TAG#v}"
-# Use date from API (fallback to current date if failed)
-CURRENT_DATE=$(date -d "${PUBLISHED_AT}" +%Y-%m-%d 2>/dev/null || date +%Y-%m-%d)
+
+# NOTE: The 'tags' API does not provide a 'published_at' date.
+# We will use the current date for the metainfo.xml update.
+CURRENT_DATE=$(date +%Y-%m-%d)
 
 echo "ℹ️  Latest Version: ${NEW_VERSION}"
-echo "ℹ️  Release Date:   ${CURRENT_DATE}"
+echo "ℹ️  Packaged Date:  ${CURRENT_DATE}"
 
 # Check file existence
 if [ ! -f "${FLATPAK_JSON_PATH}" ] || [ ! -f "${FLATPAK_METAINFO_PATH}" ]; then
@@ -171,14 +174,14 @@ git add "${FLATPAK_JSON_PATH}" "${FLATPAK_METAINFO_PATH}"
 # Commit changes (continue even if there are no changes to commit)
 git commit -m "feat(flatpak): update ${PKG_NAME} to ${NEW_VERSION}" || echo "⚠️  Commit failed or nothing to commit. Continuing..."
 
-# ▼▼▼ NEW: Abort if working tree is dirty ▼▼▼
+# ▼▼▼ Abort if working tree is dirty ▼▼▼
 if [ -n "$(git status --porcelain)" ]; then
     echo "❌ Error: Working tree is dirty (uncommitted changes present). Aborting."
     echo "   Please check the following files:"
     git status --short
     exit 1
 fi
-# ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+# ▲▲▲
 
 if git rev-parse "${TAG_NAME}" >/dev/null 2>&1; then
     echo "⚠️  Tag '${TAG_NAME}' already exists. Skipping tag creation."

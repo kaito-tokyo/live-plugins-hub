@@ -29,7 +29,7 @@ ARCH_PKGBUILD_PATH="${REPO_ROOT}/arch/${PKG_NAME}/PKGBUILD"
 
 # --- Main Script ---
 
-echo "🚀 Checking for the latest version of ${PKG_NAME}..."
+echo "🚀 Checking for the latest tag of ${PKG_NAME}..."
 
 # 0. Setup GitHub API Request Headers
 CURL_ARGS=(-sL)
@@ -37,8 +37,9 @@ if [ -n "${GITHUB_TOKEN-}" ]; then
     CURL_ARGS+=(-H "Authorization: token ${GITHUB_TOKEN}")
 fi
 
-# 1. Fetch latest tag from GitHub API
-API_URL="https://api.github.com/repos/${UPSTREAM_OWNER}/${UPSTREAM_REPO}/releases/latest"
+# 1. Fetch latest tag from GitHub API (Changed from releases/latest to tags)
+# tags endpoint returns an array. We fetch only the latest one using per_page=1.
+API_URL="https://api.github.com/repos/${UPSTREAM_OWNER}/${UPSTREAM_REPO}/tags?per_page=1"
 LATEST_TAG_JSON=$(curl "${CURL_ARGS[@]}" "${API_URL}")
 
 if echo "${LATEST_TAG_JSON}" | grep -q "API rate limit exceeded"; then
@@ -46,7 +47,8 @@ if echo "${LATEST_TAG_JSON}" | grep -q "API rate limit exceeded"; then
     exit 1
 fi
 
-LATEST_TAG=$(echo "${LATEST_TAG_JSON}" | jq -r .tag_name)
+# Note: The tags endpoint returns a list, so we take the first element (.[0]) and its 'name' property.
+LATEST_TAG=$(echo "${LATEST_TAG_JSON}" | jq -r '.[0].name')
 
 if [ "${LATEST_TAG}" == "null" ] || [ -z "${LATEST_TAG}" ]; then
     echo "❌ Error: Failed to fetch the latest tag."
@@ -54,6 +56,8 @@ if [ "${LATEST_TAG}" == "null" ] || [ -z "${LATEST_TAG}" ]; then
 fi
 
 NEW_VERSION="${LATEST_TAG#v}"
+
+echo "ℹ️  Latest upstream tag: ${LATEST_TAG} (Version: ${NEW_VERSION})"
 
 # 2. Check current version in PKGBUILD
 if [ ! -f "${ARCH_PKGBUILD_PATH}" ]; then
@@ -76,6 +80,7 @@ echo "🔄 Update needed (or forced): ${CURRENT_VERSION} -> ${NEW_VERSION}"
 # 3. Update PKGBUILD (Using awk)
 echo "📦 Updating PKGBUILD..."
 
+# Note: Using archive/refs/tags/ works for simple tags even if no release exists.
 DOWNLOAD_URL="https://github.com/${UPSTREAM_OWNER}/${UPSTREAM_REPO}/archive/refs/tags/${LATEST_TAG}.tar.gz"
 SHA256_SUM=$(curl -sL "${DOWNLOAD_URL}" | sha256sum | awk '{print $1}')
 
