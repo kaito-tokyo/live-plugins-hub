@@ -149,8 +149,8 @@ echo "🚀 Executing Git operations..."
 
 git add "${FLATPAK_JSON_PATH}" "${FLATPAK_METAINFO_PATH}"
 
-# Commit changes
-git commit -m "feat(flatpak): update ${PKG_NAME} to ${NEW_VERSION}"
+# Commit changes (continue even if there are no changes to commit)
+git commit -m "feat(flatpak): update ${PKG_NAME} to ${NEW_VERSION}" || echo "⚠️  Commit failed or nothing to commit. Continuing..."
 
 if git rev-parse "${TAG_NAME}" >/dev/null 2>&1; then
     echo "⚠️  Tag '${TAG_NAME}' already exists. Skipping tag creation."
