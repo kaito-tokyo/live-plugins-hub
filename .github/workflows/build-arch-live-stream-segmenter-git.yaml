@@ -19,8 +19,6 @@ jobs:
     steps:
       - name: Checkout project repository
         uses: actions/checkout@v6
-        with:
-          submodules: recursive
 
       - name: Setup builder
         shell: bash
