@@ -36,6 +36,7 @@ jobs:
         shell: bash
         run: |
           git clone https://aur.archlinux.org/cpp-httplib.git
+          chown -R builder:builder cpp-httplib
           cd cpp-httplib
           sudo -u builder makepkg -si --noconfirm
 
