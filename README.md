@@ -142,6 +142,6 @@ Please feel free to open an issue or submit a pull request!
 
 ## 📄 License
 
-This repository is licensed under the GPL-3.0 License. See the [LICENSE](LICENSE) file for details.
+This repository is licensed under the CC0 1.0 Universal License. See the [LICENSE](LICENSE) file for details.
 
 The plugins themselves may be under different licenses. Please refer to their respective repositories for more information.
