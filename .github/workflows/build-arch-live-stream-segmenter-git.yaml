@@ -1,4 +1,4 @@
-name: Arch live-backgroundremoval-lite-git
+name: Arch live-stream-segmenter-git
 
 on:
   push:
