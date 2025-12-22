@@ -28,15 +28,7 @@ jobs:
           chown -R builder:builder .
           pacman -Syu --noconfirm git
 
-      - name: Install cpp-httplib
-        shell: bash
-        run: |
-          git clone https://aur.archlinux.org/cpp-httplib.git
-          chown -R builder:builder cpp-httplib
-          cd cpp-httplib
-          sudo -u builder makepkg -si --noconfirm
-
       - name: Build
         shell: bash
-        working-directory: arch/live-backgroundremoval-lite-git
+        working-directory: arch/live-stream-segmenter-git
         run: sudo -u builder makepkg -s --noconfirm
