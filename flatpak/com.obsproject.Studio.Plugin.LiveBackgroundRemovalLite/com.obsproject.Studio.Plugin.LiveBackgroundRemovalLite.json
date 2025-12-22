@@ -18,9 +18,12 @@
         "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
         "-DCMAKE_INSTALL_INCLUDEDIR=include",
         "-DNCNN_SHARED_LIB=OFF",
-        "-DNCNN_BUILD_TESTS=OFF",
+        "-DNCNN_BUILD_BENCHMARK=OFF",
         "-DNCNN_BUILD_EXAMPLES=OFF",
-        "-DNCNN_BUILD_TOOLS=OFF"
+        "-DNCNN_BUILD_TESTS=OFF",
+        "-DNCNN_BUILD_TOOLS=OFF",
+        "-DNCNN_VERSION=20250916",
+        "-DNCNN_SIMPLEOMP=ON"
       ],
       "sources": [
         {
@@ -64,6 +67,7 @@
   ],
   "cleanup": [
     "/include",
+    "/lib/*.a",
     "/lib/cmake",
     "/lib/pkgconfig"
   ]
