@@ -1,7 +1,7 @@
 # Maintainer: Kaito Udagawa <umireon at kaito dot tokyo>
 pkgname=live-backgroundremoval-lite-git
 _pkgname="${pkgname%-git}"
-pkgver=3.1.1.r2.gf69f5b6
+pkgver=3.5.3.r0.ga54f69f
 pkgrel=1
 pkgdesc='Live Background Removal Lite for OBS Studio'
 arch=('x86_64')
@@ -25,8 +25,9 @@ build() {
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_LIBDIR=lib \
-    -DUSE_PKGCONFIG=ON \
     -DBUILD_TESTING=OFF \
+    -DENABLE_ASAN=OFF \
+    -DENABLE_UBSAN=OFF \
     -GNinja
   cmake --build build
 }

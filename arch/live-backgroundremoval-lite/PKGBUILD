@@ -18,8 +18,9 @@ build() {
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_LIBDIR=lib \
-    -DUSE_PKGCONFIG=ON \
     -DBUILD_TESTING=OFF \
+    -DENABLE_ASAN=OFF \
+    -DENABLE_UBSAN=OFF \
     -GNinja
   cmake --build build
 }

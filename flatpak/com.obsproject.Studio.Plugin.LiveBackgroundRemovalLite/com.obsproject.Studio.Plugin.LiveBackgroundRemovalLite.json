@@ -42,7 +42,9 @@
         "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
         "-DCMAKE_PREFIX_PATH=/app/plugins/LiveBackgroundRemovalLite",
         "-DUSE_PKGCONFIG=ON",
-        "-DBUILD_TESTING=OFF"
+        "-DBUILD_TESTING=OFF",
+        "-DENABLE_ASAN=OFF",
+        "-DENABLE_UBSAN=OFF"
       ],
       "sources": [
         {
