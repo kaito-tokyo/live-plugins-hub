@@ -28,6 +28,13 @@ jobs:
           chown -R builder:builder .
           pacman -Syu --noconfirm git
 
+      - name: Install quickjs-ng
+        shell: bash
+        run: |
+          git clone https://aur.archlinux.org/quickjs-ng.git
+          cd quickjs-ng
+          sudo -u builder makepkg -si --noconfirm
+
       - name: Build
         shell: bash
         working-directory: arch/live-stream-segmenter-git
