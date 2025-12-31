@@ -51,9 +51,7 @@
       "builddir": true,
       "config-opts": [
         "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-        "-DCMAKE_PREFIX_PATH=/app/plugins/LiveStreamSegmenter",
-        "-DUSE_PKGCONFIG=ON",
-        "-DBUILD_TESTING=OFF"
+        "-DCMAKE_PREFIX_PATH=/app/plugins/LiveStreamSegmenter"
       ],
       "sources": [
         {
