@@ -46,6 +46,21 @@
       ]
     },
     {
+      "name": "libsecret-headers",
+      "buildsystem": "simple",
+      "build-commands": [
+        "mkdir -p /app/include/libsecret-1/libsecret",
+        "cp libsecret/*.h /app/include/libsecret-1/libsecret/"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.gnome.org/GNOME/libsecret.git",
+          "tag": "0.21.6"
+        }
+      ]
+    },
+    {
       "name": "qtkeychain",
       "buildsystem": "cmake-ninja",
       "builddir": true,
