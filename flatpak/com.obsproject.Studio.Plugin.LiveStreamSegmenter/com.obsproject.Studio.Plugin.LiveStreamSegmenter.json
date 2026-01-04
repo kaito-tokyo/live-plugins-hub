@@ -49,8 +49,8 @@
       "name": "libsecret-headers",
       "buildsystem": "simple",
       "build-commands": [
-        "mkdir -p /app/include/libsecret-1/libsecret",
-        "cp libsecret/*.h /app/include/libsecret-1/libsecret/"
+        "mkdir -p /app/plugins/LiveStreamSegmenter/include/libsecret",
+        "cp libsecret/*.h /app/plugins/LiveStreamSegmenter/include/libsecret/"
       ],
       "sources": [
         {
