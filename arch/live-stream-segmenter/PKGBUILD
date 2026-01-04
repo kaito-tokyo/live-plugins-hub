@@ -1,6 +1,6 @@
 # Maintainer: Kaito Udagawa <umireon at kaito dot tokyo>
 pkgname=live-stream-segmenter
-pkgver=1.0.3
+pkgver=1.0.4
 pkgrel=1
 pkgdesc='Live Stream Segmenter for OBS Studio'
 arch=('x86_64')
@@ -10,7 +10,7 @@ depends=('curl' 'fmt' 'nlohmann-json' 'obs-studio' 'qcoro' 'qtkeychain-qt6')
 makedepends=('cmake' 'ninja')
 conflicts=("${pkgname}-git" "${pkgname}-git-debug")
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/kaito-tokyo/$pkgname/archive/refs/tags/$pkgver.tar.gz")
-sha256sums=('aac3d8a32b8362e3b2d0c4c79918a7bab259a832ad6182a47dc36815bd4ce736')
+sha256sums=('10e92965bd9caa571fd508f1b575ac778b002e0d0377e87fbca87cfa7fc39e4b')
 
 build() {
   cd "${pkgname}-${pkgver}"
