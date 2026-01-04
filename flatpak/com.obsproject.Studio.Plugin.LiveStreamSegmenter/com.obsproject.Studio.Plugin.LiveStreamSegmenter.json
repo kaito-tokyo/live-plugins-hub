@@ -49,8 +49,9 @@
       "name": "libsecret-headers",
       "buildsystem": "simple",
       "build-commands": [
-        "mkdir -p /app/plugins/LiveStreamSegmenter/include/libsecret",
-        "cp libsecret/*.h /app/plugins/LiveStreamSegmenter/include/libsecret/"
+        "mkdir -p /app/plugins/LiveStreamSegmenter/{include/libsecret-1/libsecret,lib/pkgconfig}",
+        "cp libsecret/*.h /app/plugins/LiveStreamSegmenter/include/libsecret-1/libsecret/",
+        "awk '/^Cflags:/ { $0 = \"Cflags: -I/app/plugins/LiveStreamSegmenter/include/libsecret-1\" } 1' /usr/lib/x86_64-linux-gnu/pkgconfig/libsecret-1.pc > /app/plugins/LiveStreamSegmenter/lib/pkgconfig/libsecret-1.pc"
       ],
       "sources": [
         {
